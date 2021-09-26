@@ -1,0 +1,9 @@
+resources:
+  - type: storage.v1.bucket
+    name: <name of bucket. it should be unique>
+    properties:
+      location: <location>
+      storageClass: <stg class>
+      versioning:
+        enabled: false
+        

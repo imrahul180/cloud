@@ -1,0 +1,20 @@
+resources:
+  - type: compute.v1.regionInstanceGroupManager
+    name: <name of deployment>
+    properties:
+      instanceTemplate: projects/<project-name>/global/instanceTemplates/<name of instance template>
+      region: <name of region>
+      targetSize: 1
+      namedPorts: #based on your requirement
+        - name: http
+          port: 80
+
+  - type: compute.v1.regionAutoscaler
+    name: songs-prod-web-autoscaler
+    properties:
+      target: $(ref.<name of instance group manager>.selfLink)
+      region: <name of region>
+      autoscalingPolicy: # Based on your application workload assign the value
+        minNumReplicas: 2
+        maxNumReplicas: 5
+        coolDownPeriodSec: 120

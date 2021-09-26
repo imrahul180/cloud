@@ -1,0 +1,29 @@
+resources:
+  - name: <name of instanceTemplate>
+    type: compute.v1.instanceTemplate
+    properties:
+      properties:
+        machineType: <machineType based on the expected workload>
+        networkInterfaces:
+          - network: <network path>
+            subnetwork: <subnet path>
+        disks:
+          - boot: true
+            autoDelete: true
+            initializeParams:
+              sourceImage: <image path>
+              diskSizeGb: <disk size>
+              diskType: <diskType>
+        serviceAccounts:
+          - email: <svc account>.iam.gserviceaccount.com
+            scopes:
+              - https://www.googleapis.com/auth/cloud-platform
+        metadata:
+          items:
+            - key: <your key values go here>
+              value: <specifiy your value here. it can be container location>
+        tags: # it based on the requirement
+          items: 
+            - test app
+        labels:
+          type: prod

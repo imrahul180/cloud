@@ -1,0 +1,6 @@
+resources:
+  - type: compute.v1.sslCertificate
+    name: <name of cert>
+    properties:
+      cert_file: <path of public key>
+      cert_private_key: <path of private key> # make sure after deployment remove the private key and do not keep on github

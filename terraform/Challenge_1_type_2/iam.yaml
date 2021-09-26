@@ -1,0 +1,33 @@
+---
+resources:
+  - name: get-iam-policy
+    action: gcp-types/cloudresourcemanager-v1:cloudresourcemanager.projects.getIamPolicy
+    properties:
+      resource: <project name>
+    metadata:
+      runtimePolicy:
+        - UPDATE_ALWAYS
+
+  - name: patch-iam-policy
+    action: gcp-types/cloudresourcemanager-v1:cloudresourcemanager.projects.setIamPolicy
+    properties:
+      resource: <project name>
+      policy: $(ref.get-iam-policy)
+      gcpIamPolicyPatch:
+        add:
+          - role: roles/logging.logWriter
+            members:
+              - "serviceAccount:<serviceAccount>.iam.gserviceaccount.com"
+          - role: roles/monitoring.metricWriter
+            members:
+              - "serviceAccount:<serviceAccount>.iam.gserviceaccount.com"
+          - role: roles/compute.osAdminLogin
+            members:
+              - "serviceAccount:<serviceAccount>.iam.gserviceaccount.com"
+          - role: roles/cloudsql.client
+            members:
+              - "serviceAccount:<serviceAccount>.iam.gserviceaccount.com"
+          - role: roles/storage.objectViewer
+            members:
+              - "serviceAccount:<serviceAccount>.iam.gserviceaccount.com"
+...
