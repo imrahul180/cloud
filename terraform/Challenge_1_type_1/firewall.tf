@@ -50,3 +50,17 @@ resource "google_compute_firewall" "allow_web_http" {
   source_ranges = ["0.0.0.0/0"]
   target_tags   = ["web"]
 }
+
+resource "google_compute_firewall" "deny_egress_from_database_to_app" {
+  deny {
+    protocol = "all"
+  }
+
+  destination_ranges = ["0.0.0.0/0", "192.168.0.49"]
+  direction          = "EGRESS"
+  name               = "deny-egress-from-database-to-app"
+  network            = "https://www.googleapis.com/compute/v1/projects/ops-rahul-kumar/global/networks/network1-gdm"
+  priority           = 1000
+  project            = "ops-rahul-kumar"
+  target_tags        = ["database"]
+}

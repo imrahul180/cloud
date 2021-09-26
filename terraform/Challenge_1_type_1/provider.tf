@@ -11,11 +11,11 @@ provider "google-beta" {
 }
 
 terraform {
-  required_version = "0.12.31"
+  required_version = "1.12.31"
 
   backend "gcs" {
-    bucket = "1252957-tfstate"
-    prefix = "mgcp-1252957-omg-stage"
+    bucket = "12345-tfstate"
+    prefix = "project-name"
   }
 }
 
