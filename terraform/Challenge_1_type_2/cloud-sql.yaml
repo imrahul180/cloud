@@ -1,0 +1,25 @@
+resources:
+  - type: sqladmin.v1beta4.instance
+    name: <name of cloud sql instance>
+    properties:
+      databaseVersion: POSTGRES_11
+      instanceType: CLOUD_SQL_INSTANCE
+      backendType: SECOND_GEN
+      region: <name of region>
+      gceZone: <name of zone>
+      settings:
+        tier: <specifiy db tier>
+        availabilityType: REGIONAL
+        dataDiskType: PD_SSD
+        dataDiskSizeGb: '60'
+        ipConfiguration:
+          ipv4Enabled: false
+          privateNetwork: <path of network>
+        maintenanceWindow: # based on your requirement
+          day: 7
+          hour: 0
+        backupConfiguration:
+          enabled: true
+          startTime: 01:00
+          pointInTimeRecoveryEnabled: true
+        storageAutoResize: true

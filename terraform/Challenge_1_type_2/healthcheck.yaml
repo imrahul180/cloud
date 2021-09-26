@@ -1,0 +1,10 @@
+resources:
+  - name: songs-prod-hc
+    type: compute.v1.healthCheck
+    properties:
+      type: TCP
+      checkIntervalSec: 10
+      unhealthyThreshold: 10
+      tcpHealthCheck:
+        port: 443
+        requestPath: /

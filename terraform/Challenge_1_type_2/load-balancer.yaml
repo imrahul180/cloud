@@ -1,0 +1,71 @@
+resources:
+ ## Frontend Public Tier
+  - type: compute.v1.globalAddress
+    name: <name for ext lb ip>
+
+#  # HTTPS Proxy
+  - type: compute.v1.targetHttpsProxy
+    name: <name of frontend>
+    properties:
+      region: <region>
+      sslCertificates: 
+        - projects/<project-name>/global/sslCertificates/<name of cert>
+      urlMap: $(ref.<name of url map>.selfLink)
+
+ # HTTP Proxy
+  - type: compute.v1.targetHttpProxy
+    name: <name of frontend>
+    properties:
+      region: <name of region>
+      urlMap: $(ref.<name of url map>.selfLink)
+
+#  #forwading rule to target https proxy
+  - name: <name of forwarding rule>
+    type: compute.v1.globalForwardingRule
+    properties:
+      target: $(ref.<name of targetHttpsProxy>.selfLink)
+      IPAddress: $(ref.<name of ext lb ip>.selfLink)
+      IPProtocol: TCP
+      portRange: 443
+
+ #forwarding rule to target http proxy
+  - name: <name of forwarding rule>
+    type: compute.v1.globalForwardingRule
+    properties:
+      target: $(ref.<name of targetHttpProxy>.selfLink)
+      IPAddress: $(ref.<name of EXTERNAL IPAddress>.selfLink)
+      IPProtocol: TCP
+      portRange: 80
+
+  - type: compute.v1.backendService
+    name: <name of bs>
+    properties:
+      region: region
+      loadBalancingScheme: 'EXTERNAL'
+      healthChecks:
+        - projects/<project name>/global/healthChecks/<name of hc>
+      backends:
+        - group: projects/<name of project>/regions/europe-west1/instanceGroups/<name of instance group>
+      connectionDraining:
+        drainingTimeoutSec: 60
+
+#url mapper
+  - type: compute.v1.urlMap
+    name: <url map name>
+    properties:
+      defaultService: projects/<name of project>/global/backendServices/<name of bs>
+      hostRules:
+        - hosts:
+            - example.com/web
+          pathMatcher: <path-matcher-a>
+      pathMatchers:
+        - name: <path-matcher-a>
+          defaultService: projects/<name of project>/global/backendServices/<name of bs>
+
+#url redirect from http traffic to https
+  - type: compute.v1.urlMap
+    name: <name>
+    properties:
+      defaultUrlRedirect:
+        redirectResponseCode: MOVED_PERMANENTLY_DEFAULT
+        httpsRedirect: True
